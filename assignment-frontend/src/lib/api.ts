@@ -7,7 +7,8 @@ export const getPendingRequests = async (): Promise<GuestRequest[]> => {
   );
   return res.data;
 };
-const BACKEND_URL = "http://localhost:3001";
+const BACKEND_URL =
+  "https://travel-studio-intern-assignment-1-qjim.onrender.com";
 export async function updateRequestStatus({
   id,
   status,
