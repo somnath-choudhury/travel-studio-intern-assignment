@@ -1,7 +1,7 @@
 "use client";
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getPendingRequests } from "@/lib/api";
-import { updateRequestStatus } from "@/lib/api";
+import { getPendingRequests, updateRequestStatus } from "@/lib/api";
 
 export default function RequestsTable() {
   const { data, isLoading, error } = useQuery({
@@ -20,27 +20,27 @@ export default function RequestsTable() {
 
   if (isLoading)
     return (
-      <div className="flex justify-center items-center min-h-64 text-gray-500">
+      <div className="flex justify-center items-center min-h-64 text-gray-300">
         Loading guest requests...
       </div>
     );
 
   if (error)
     return (
-      <div className="text-red-500 text-center font-medium mt-4">
+      <div className="text-red-400 text-center font-medium mt-4">
         Failed to load guest requests.
       </div>
     );
 
   return (
-    <div className="overflow-x-auto">
-      <div className="max-w-7xl mx-auto mt-6 p-4 sm:p-6 bg-white rounded-2xl shadow-md">
-        <h2 className="text-2xl font-semibold text-luxuryBlue mb-4">
-          Guest Service Requests
-        </h2>
+    <div className="relative min-h-screen bg-cover bg-center bg-no-repeat">
+      <h2 className="text-3xl font-bold text-white mt-6 mb-6 text-center drop-shadow">
+        Guest Service Requests
+      </h2>
 
-        <table className="min-w-full text-sm text-gray-700">
-          <thead className="bg-blue-700 text-xl text-white sticky top-0">
+      <div className="overflow-x-auto p-2 rounded-xl font-semibold ">
+        <table className="min-w-full text-sm text-white/90 backdrop-blur">
+          <thead className="bg-blue-900 text-white text-base">
             <tr>
               <th className="px-4 py-3 text-left">Phone</th>
               <th className="px-4 py-3 text-left">Name</th>
@@ -55,8 +55,8 @@ export default function RequestsTable() {
               <tr
                 key={req.id}
                 className={`border-b ${
-                  index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                } hover:bg-blue-50 transition`}
+                  index % 2 === 0 ? "bg-black/30" : "bg-black/20"
+                } hover:bg-blue-900/30 transition`}
               >
                 <td className="px-4 py-3">{req.guest_phone}</td>
                 <td className="px-4 py-3">{req.guest_name}</td>
@@ -68,8 +68,8 @@ export default function RequestsTable() {
                   <span
                     className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${
                       req.status === "pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-green-100 text-green-800"
+                        ? "bg-yellow-400 text-yellow-900"
+                        : "bg-green-500 text-green-900"
                     }`}
                   >
                     {req.status}
@@ -81,7 +81,7 @@ export default function RequestsTable() {
                     onChange={(e) =>
                       mutation.mutate({ id: req.id, status: e.target.value })
                     }
-                    className="border px-2 py-1 rounded text-sm"
+                    className="border border-white bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm"
                   >
                     <option value="pending">Pending</option>
                     <option value="done">Done</option>

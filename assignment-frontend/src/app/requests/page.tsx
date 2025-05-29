@@ -9,11 +9,17 @@ export default function RequestsPage() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <main className="min-h-screen p-4 sm:p-8">
-        <h1 className="text-2xl sm:text-4xl font-bold text-center text-blue-800">
-          Welcome to Travel Studio Hotel
-        </h1>
-        <RequestsTable />
+      <main className="relative min-h-screen bg-gray-900 bg-[url('/hotel-bg.jpg')] bg-cover bg-center bg-no-repeat">
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/15 backdrop-blur-sm" />
+
+        {/* Main content */}
+        <div className="relative z-10 flex flex-col items-center px-4 sm:px-8 pt-12">
+          <h1 className="text-3xl sm:text-5xl font-bold text-center text-white drop-shadow-lg mb-8">
+            Travel Studio Guest Request Dashboard
+          </h1>
+          <RequestsTable />
+        </div>
       </main>
     </QueryClientProvider>
   );
@@ -37,7 +43,7 @@ export default function RequestsPage() {
 //       <button
 //         onClick={() => router.push("/requests")}
 //         className="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-lg text-lg font-medium transition"
-        
+
 //       >
 //         Go to Guest Requests
 //       </button>
