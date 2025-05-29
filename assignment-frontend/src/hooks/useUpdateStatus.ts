@@ -24,7 +24,7 @@ export const useUpdateStatus = () => {
     return data;
     },
     onSuccess: () => {
-      // Refresh the requests list
+      
       queryClient.invalidateQueries({ queryKey: ["pendingRequests"] });
     },
   });
