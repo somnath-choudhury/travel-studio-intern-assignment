@@ -1,0 +1,237 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        -40
+      ],
+      "id": "6457d77a-87a3-4da5-8177-e6e40de0c55d",
+      "name": "WhatsApp Trigger",
+      "webhookId": "7bf65fa8-6f93-4ee0-999a-508e2e6cfa23",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "wCzkDB36gfqKGXUJ",
+          "name": "WhatsApp OAuth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5a206c13-7b4b-4958-ba14-2ea3f0ffccde",
+              "name": "guest_phone",
+              "value": "={{ $json.contacts[0].wa_id }}",
+              "type": "string"
+            },
+            {
+              "id": "418b11c3-099f-4894-8cb1-f2053c0796f1",
+              "name": "guest_name",
+              "value": "={{ $json.contacts[0].profile.name }}",
+              "type": "string"
+            },
+            {
+              "id": "e89ed1a4-495a-4c2c-9251-c64f88b64289",
+              "name": "request_text",
+              "value": "={{ $json.messages[0].text.body }}",
+              "type": "string"
+            },
+            {
+              "id": "b5ea9a84-9c46-478b-9efa-99f4d3e9ea68",
+              "name": "timestamp",
+              "value": "={{ new Date($json.messages[0].timestamp * 1000).toISOString() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -160,
+        -40
+      ],
+      "id": "11297e99-3e03-472d-9ac6-810ebf58e976",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "guest_requests",
+          "mode": "list",
+          "cachedResultName": "guest_requests"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "guest_phone",
+              "displayName": "guest_phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "guest_name",
+              "displayName": "guest_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "request_text",
+              "displayName": "request_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        60,
+        -40
+      ],
+      "id": "8cf51ba5-be9b-4786-8001-96d171083b66",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "dcdXn8B8gvoUcIz2",
+          "name": "Postgres account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "643138858891526",
+        "recipientPhoneNumber": "={{ $json.guest_phone }}",
+        "textBody": "Request received. Our staff will assist you soon",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        280,
+        -40
+      ],
+      "id": "f64af761-bb6b-4ad2-9a73-888dd4350c3d",
+      "name": "WhatsApp Business Cloud",
+      "webhookId": "1434d50c-e737-4e1a-9d51-821aa0c94916",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "PcbWLUrxMVtRaGfY",
+          "name": "WhatsApp account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b72dc06f-d62a-4871-83d9-20df72f58b70",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6baa0811d6813912182acbdf1d81e675e77b5d5a8ab761f1c96d59e4038e55a7"
+  },
+  "id": "vuvv5mW28TAVaTOM",
+  "tags": []
+}
